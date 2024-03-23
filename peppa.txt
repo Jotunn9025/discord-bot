@@ -73,3 +73,4 @@ Features
 ~millet
 ~draconis
 ~dory
+~r [numberOfDice]d[numberOfFaces]
