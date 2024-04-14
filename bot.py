@@ -3,7 +3,6 @@ import config
 from discord.ext import commands
 import time
 import random
-
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
@@ -22,6 +21,7 @@ last_execution_times = {}
 @client.event
 async def on_ready():
     print("I'm up and running, boss")
+    config.thanks_count = load_thanks_count()  # Load thanks count from file when the bot starts
 
 @client.event
 async def on_message(message):
@@ -61,5 +61,22 @@ async def on_message(message):
             else:
                 await message.channel.send(f"You can only use this command once every {cooldown} seconds.")
             break 
+    
+    if "good bot" in message.content.lower() and message.author != client.user:
+        config.thanks_count += 1
+        await message.channel.send(f"Thanks\nThanks count: {config.thanks_count}")
+        save_thanks_count(config.thanks_count)  # Save thanks count to file
+
+def load_thanks_count():
+    try:
+        with open("thanks_count.txt", "r") as file:
+            return int(file.read())
+    except FileNotFoundError:
+        return 0
+
+def save_thanks_count(count):
+    with open("thanks_count.txt", "w") as file:
+        file.write(str(count))
 
 client.run(config.DISCORD_TOKEN)
+
