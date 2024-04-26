@@ -79,4 +79,3 @@ def save_thanks_count(count):
         file.write(str(count))
 
 client.run(config.DISCORD_TOKEN)
-
